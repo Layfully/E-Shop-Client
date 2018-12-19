@@ -14,6 +14,27 @@
 
             <span class="tag is-rounded is-medium">{{ product.price }}</span>
           </section>
+
+          <section class="section">
+            <form action>
+              <ProductVariation v-for="(variations, type) in product.variaitons" :type="type" :key="type" :variations="variations" :v-model="form.variation"/>
+
+              <div class="field has-addons" v-if="form.variation">
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select name="" id="">
+                      <option value=""></option>
+                    </select>
+                  </div>
+                </div>
+                <div class="control">
+                  <button type="submit" class="button is-info">
+                    Add to cart
+                  </button>
+                </div>
+              </div>
+            </form>
+          </section>
         </div>
       </div>
     </div>
@@ -21,19 +42,26 @@
 </template>
 
 <script>
+import ProductVariation from "@/components/products/ProductVariation";
 export default {
-  data(){
-    return{
-      product: null
-    }
+  data() {
+    return {
+      product: null,
+      form:{
+        variation: '',
+        quantity: 1
+      }
+    };
   },
-
+  components:{
+    ProductVariation
+  },
   async asyncData({ params, app }) {
     let response = await app.$axios.$get(`products/${params.slug}`);
 
     return {
       product: response.data
-    }
+    };
   }
 };
 </script>
