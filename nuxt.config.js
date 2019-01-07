@@ -15,14 +15,35 @@ module.exports = {
   },
 
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: 'auth/login',
+            method: 'post',
+            propertyName: 'meta.token'
+          },
+
+          user: {
+            url: 'auth/me',
+            method: 'get',
+            propertyName: 'data'
+          }
+        },
+      }
+    }
+  },
 
   axios: {
     baseURL: 'http://localhost/ECommerce/ECommerce/public/api'
   },
-  
-  css:[
+
+  css: [
     '~assets/styles/app.scss'
   ],
   /*
@@ -33,10 +54,15 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    postcss: {
+      plugin: {
+        'postcss-custom-properties': false
+      }
+    },
     /*
     ** Run ESLint on save
     */
-    extend (config, { isDev, isClient }) {
+    extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
